@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Psychology Test</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            min-height: 100%; /* เปลี่ยนจาก height เป็น min-height */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* ใส่รูปพื้นหลัง */
+            background-image: url('UI3.png'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Mitr', sans-serif;
+            background-color: #f0f0f0; /* ใส่สีสำรองเผื่อรูปไม่โหลด */
+        }
+
+        .description-area {
+            width: 70%;
+            max-height: 300px; /* จำกัดความสูง */
+            text-align: center;
+            font-size: 16px; /* แก้จาก xp เป็น px */
+            line-height: 1.6;
+            overflow-y: auto; 
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* เพิ่มพื้นหลังโปร่งแสงให้พออ่านออก */
+            border-radius: 15px;
+        }
+    </style>
+ </head>
+<body> 
+    <div class="description-area">
+        <p>คุณทำแบบทดสอบจบแล้วงับบ ขอบคุณทุกคนที่มาเข้าร่วมนะงับบบ</p>
+    </div>
+
+    <script type="module" src="firebase-config.js"></script>
+
+<script>
+    window.onload = function() {
+
+        // ดึงข้อมูลส่วนตัว
+        const name = localStorage.getItem('user_name') || "ไม่ระบุชื่อ";
+        const gender = localStorage.getItem('user_gender') || "ไม่ระบุ";
+        const status = localStorage.getItem('user_status') || "ไม่ระบุ";
+
+        // ดึงคะแนนที่แอบบันทึกไว้จากหน้าต่างๆ มาเตรียมไว้
+        const p1 = localStorage.getItem('p1') || 0;
+        const p2 = localStorage.getItem('p2') || 0;
+        const p3 = localStorage.getItem('p3') || 0;
+        const p4 = localStorage.getItem('p4') || 0;
+        const p5 = localStorage.getItem('p5') || 0;
+
+        // เตรียมข้อมูลส่งไป n8n (จะไม่มีการแสดงผลบนหน้าจอ)
+        const payload = {
+            username: name,    // เปลี่ยนจาก "Anonymous_User" เป็นตัวแปร name
+            gender: gender,    // เพิ่มบรรทัดนี้เพื่อส่งเพศ
+            status: status,    // เพิ่มบรรทัดนี้เพื่อส่งสถานะ 
+            score_openness: p1,
+            score_conscientiousness: p2,
+            score_extraversion: p3,
+            score_agreeableness: p4,
+            score_neuroticism: p5
+        };
+
+        // ยิงข้อมูลเข้า n8n Webhook
+        fetch('https://cb-tee.app.n8n.cloud/webhook/OCEAN-survey-result', { // ใช้ URL ทดสอบของคุณ
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            console.log("Data sent successfully!");
+            // ถ้าส่งเสร็จแล้วอยากให้ล้างคะแนนในเครื่องทิ้งเพื่อเริ่มใหม่
+            // localStorage.clear(); 
+        })
+        .catch(err => console.error("Error:", err));
+    };
+</script>
+
+    
+</body>
+</html>

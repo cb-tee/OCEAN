@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Psychology Test</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Tahoma', sans-serif;
+            background: radial-gradient(circle, #e6f7ff 0%, #d4efff 100%);
+            display: flex; justify-content: center; align-items: center;
+      
+       body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* ใส่รูปพื้นหลังใหญ่ที่มี แมงกะพรุน/ดาว ที่นี่ */
+            background-image: url('UI3.png'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Mitr', sans-serif;
+        }
+
+
+        .quiz-container {
+            width: 550px; height: 800px; 
+            background-image: url('ui-box.png'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative; 
+        }
+
+        /* ส่วนความคืบหน้า (Progress) */
+        .header-section {
+            position: absolute; top: 155px; left: 112px;
+            width: 325px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .progress-container {
+            width: 80%; height: 12px; background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px; overflow: hidden;
+        }
+        .progress-bar { height: 100%; background-color: #8DA9D4; width: 0%; transition: width 0.3s ease; }
+        .percentage-text { font-size: 14px; font-weight: bold; color: #5D7BA8; }
+
+        /* คำถาม */
+        #question-text {
+            position: absolute; top: 215px; left: 105px;
+            width: 340px; height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; font-size: 18px; font-weight: bold; color: #5D7BA8; line-height: 1.4;
+        }
+
+        /* ปุ่มคำตอบ (Transparent) */
+        .options-container {
+            position: absolute; top: 370px; left: 105px;
+            width: 340px; display: flex; flex-direction: column; gap: 20px;
+        }
+        .option-btn {
+            background: transparent; border: none; height: 62px; 
+            cursor: pointer; font-size: 16px; color: #5D7BA8; font-weight: 500;
+        }
+        .option-btn:hover { background-color: rgba(255, 255, 255, 0.4); border-radius: 15px; }
+
+        /* หน้าผลลัพธ์ */
+        .result-screen {
+            display: none; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); text-align: center; width: 300px;
+        }
+
+        /* ปุ่ม Next (รูปภาพ) วางตำแหน่งมุมขวาล่างตามรูปวาด */
+        #next-image-btn {
+            display: none; /* ซ่อนไว้ก่อนจนกว่าจะทำครบ */
+            position: absolute;
+            bottom: 75px; /* ปรับค่านี้ให้ตรงกับรูปวาดของคุณ */
+            right: 90px;
+            cursor: pointer;
+            width: 350px; /* ปรับขนาดตามต้องการ */
+            transition: transform 0.2s;
+        }
+        #next-image-btn:hover { transform: scale(1.05); }
+        #next-image-btn:active { transform: scale(0.95); }
+
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="header-section">
+            <div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
+            <div class="percentage-text" id="percentNum">0%</div>
+        </div>
+
+        <div id="question-content">
+            <div id="question-text"></div>
+            <div class="options-container" id="options"></div>
+        </div>
+
+        <div class="result-screen" id="result-screen">
+            <h2 style="color: #5D7BA8;">ทำครบ 100% แล้ว!</h2>
+            <p id="score-display" style="color: #5D7BA8; font-weight: bold;"></p>
+            <p style="color: #8DA9D4; font-size: 14px; cursor: pointer; text-decoration: underline;" onclick="location.reload()">ทำอีกรอบ</p>
+        </div>
+
+        <img src="next-button.png" id="next-image-btn" alt="Next" onclick="goToNextPage()">
+    </div>
+
+<script>
+    const questions = [
+        { q: "เมื่อคุณไปเที่ยวที่อาหรับบังเอิญเจอร้านขนมน่ากินมาก แต่ไม่มีเมนูภาษาอังกฤษ สัญญาณเน็ตไม่ดี คุณจะทำยังไง?", a: [{text: "เดินเข้าไปในร้านแลัวสั่งขนมตามคนที่นั่งกินอยู่", score: 4}, {text: "หาร้านอื่นที่น่ากินและมีเมนูภาษาอังกฤษ", score: 3}, {text: "ได้แต่นั่งมองอยู่หน้าร้าน", score: 1}, {text: "เดินเข้าไปในร้านแล้วชี้เมนูแทนการพูด", score: 2}] },
+        { q: "เมื่อเพื่อนชวนไปทำกิจกรรมที่ไม่เคยทำ ในวันที่คุณอยากนอนมาก คุณจะตอบยังไง?", a: [{text: "ไปเลย! อะไรใหม่ๆ น่าสนุกเสมอ", score: 4}, {text: "ไป แต่รีบเที่ยวรีบกลับมานอน", score: 3}, {text: "ไม่ไป เพราะความง่วงยิ่งใหญ่กว่า", score: 2}, {text: "บอกว่าเดี๋ยวดูก่อนแต่จริงๆ คือไม่ไป", score: 1}] },
+        { q: "เมื่อเจอสูตรขนมใหม่ที่หน้าตาดีกว่าเดิมแต่เสี่ยงทำพลาด คุณจะเลือกสูตรไหน?", a: [{text: "เลือกสูตรใหม่ เราอาจจะทำสำเร็จก็ได้!", score: 4}, {text: "ลองสูตรใหม่ผสมสูตรเก่าเพื่อความชัวร์", score: 3}, {text: "ไม่ดีกว่า ไว้ลองคราวหน้า", score: 2}, {text: "สูตรเดิมนั่นแหละดีแล้ว", score: 1}] }
+    ];
+
+    let currentQuestion = 0;
+    let totalScore = 0;
+
+    function showQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById("question-text").innerText = q.q;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = ""; 
+
+        q.a.forEach((answer) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = answer.text;
+            btn.onclick = () => nextQuestion(answer.score); 
+            optionsDiv.appendChild(btn);
+        });
+        updateProgress();
+    }
+
+    function nextQuestion(points) {
+        totalScore += points;
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            updateProgress();
+            showResult();
+        }
+    }
+
+    function updateProgress() {
+        let percent = Math.round((currentQuestion / questions.length) * 100);
+        document.getElementById("myBar").style.width = percent + "%";
+        document.getElementById("percentNum").innerText = percent + "%";
+    }
+
+    function showResult() {
+        document.getElementById("question-content").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("score-display").innerText = "คะแนนของคุณคือ: " + totalScore;
+
+       localStorage.setItem("p1", totalScore);
+        
+        document.getElementById("next-image-btn").style.display = "block";
+    
+    }
+      
+    function goToNextPage() {
+        window.location.href = "conclusion.html?score=" + totalScore;   
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>

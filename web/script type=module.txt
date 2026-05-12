@@ -1,0 +1,28 @@
+<script type="module">
+  // 1. นำเข้า Firebase (ใช้ตัวนี้จะง่ายที่สุด)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+  // 3. เชื่อมต่อระบบ
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 4. ฟังก์ชันส่งข้อมูล (เรียกใช้ตอนสรุปผล)
+  window.saveToCloud = async function(gender, status, scores) {
+    try {
+      await addDoc(collection(db, "big5_results"), {
+        gender: gender,
+        status: status,
+        scores: scores, // ส่งมาเป็น Object เช่น { openness: 40, ... }
+        timestamp: serverTimestamp()
+      });
+      console.log("บันทึกข้อมูลเรียบร้อย!");
+    } catch (e) {
+      console.error("Error: ", e);
+    }
+  }
+</script>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* ใส่รูปพื้นหลังใหญ่ที่มี แมงกะพรุน/ดาว ที่นี่ */
+            background-image: url('UI3.png'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Mitr', sans-serif;
+        }
+
+        .result-card {
+            /* ใส่รูปกล่องสีฟ้าหลักที่นี่ */
+            background-image: url('UI2.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            width: 500px;
+            height: 550px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .score-area {
+            margin-top: 60px;
+            width: 80%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #4a4a4a;
+            /* หากมีรูปกล่องคะแนนแยก ให้ใส่ background-image ที่นี่ */
+        }
+
+        .description-area {
+            margin-top: 20px;
+            width: 70%;
+            height: 200px;
+            text-align: center;
+            font-size: 16xp;
+            line-height: 1.5;
+            overflow-y: auto; /* เผื่อข้อความยาวเกิน */
+            padding: 10px;
+        }
+
+        /* ส่วนของปุ่ม NEXT */
+        .next-button-container {
+            position: absolute;
+            bottom: 40px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .next-button-container:hover {
+            transform: scale(1.05);
+        }
+
+        .next-button-container:active {
+            transform: scale(0.95);
+        }
+
+        .next-img {
+            width: 350px; /* ปรับขนาดรูปปุ่ม NEXT ของคุณ */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="result-card">
+        <div class="score-area">
+            คะแนนของคุณคือ : <span id="finalScore">0</span> คะแนน
+        </div>
+
+        <div class="description-area">
+            <p>คำถามที่คุณตอบไปเมื่อกี้ เป็นแบบทดสอบบุคลิกภาพในด้าน Agreeableness คือบุคลิกภาพด้านความเห็นใจผู้อื่น หรือความเป็นมิตร แสดงถึงความเข้าอกเข้าใจผู้อื่น มีจิตใจดี เอื้อเฟื้อ ชอบแบ่งปัน คนที่ได้คะแนนสูงกว่า 9 คะแนนขึ้นไปมักจะเป็นคนใจดีมีเมตตา ชอบการประนีประนอมมากกว่าความขัดแย้ง มองโลกในแง่ดี เป็นคนซื่อสัตย์</p>
+        </div>
+
+        <div class="next-button-container" onclick="goToNextPage()">
+            <img src="next-button2.png" alt="NEXT" class="next-img">
+        </div>
+    </div>
+
+    <script>
+
+    // 1. ฟังก์ชันดึงค่าจาก URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const score = urlParams.get('score'); // ดึงค่าคำว่า score ออกมา
+
+    // 2. ตรวจสอบว่าถ้ามีคะแนนส่งมา ให้เปลี่ยนตัวเลขในหน้าเว็บ
+    if (score !== null) {
+        document.getElementById('finalScore').innerText = score;
+    }
+
+    // ฟังก์ชันปุ่ม NEXT เดิมของคุณ
+    function goToNextPage() {
+        window.location.href = 'question5.html'; 
+    }
+     </script>
+
+    </body>
+</html>

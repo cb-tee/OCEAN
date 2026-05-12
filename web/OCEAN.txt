@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Psychology Test</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('UI3.png'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Mitr', sans-serif;
+            color: #555; /* ปรับสีให้เข้ากับลายเส้นในรูป */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            margin-top: -50px; /* ขยับขึ้นเล็กน้อยเพื่อให้เห็นครบทุกช่อง */
+        }
+
+        #startForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* ลดระยะห่างระหว่างช่องเพื่อให้พื้นที่พอ */
+        }
+
+        .selection-group {
+            width: 100%;
+            text-align: center;
+        }
+
+        .selection-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: #4a4a4a;
+        }
+
+        /* ปรับให้เหมือนช่องในรูปคุณ: พื้นหลังขาวจางๆ ขอบมน */
+        input[type="text"], select {
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-family: 'Mitr', sans-serif;
+            border-radius: 10px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.85);
+            color: #333;
+            width: 250px;
+            outline: none;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .button-wrapper {
+            margin-top: 20px;
+        }
+
+        .pixel-button-image {
+            width: 160px; /* ปรับขนาดปุ่มให้เล็กลงนิดหน่อย จะได้ไม่เบียด */
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .pixel-button-image:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <form id="startForm">
+            
+            <div class="selection-group">
+                <label>เพศสภาพของคุณ</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>เลือกเพศ</option>
+                    <option value="male">ชาย</option>
+                    <option value="female">หญิง</option>
+                    <option value="other">อื่นๆ</option>
+                </select>
+            </div>
+
+            <div class="selection-group">
+                <label>สถานะของคุณ</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected>เลือกสถานะ</option>
+                    <option value="student">นักเรียน/นักศึกษา</option>
+                    <option value="worker">วัยทำงาน</option>
+                </select>
+            </div>
+
+            <div class="selection-group">
+                <label for="username">ชื่อของคุณ</label>
+                <input type="text" id="username" name="username" placeholder="กรอกชื่อที่นี่..." required>
+            </div>
+
+            <div class="button-wrapper">
+                <button type="submit" style="background:none; border:none; padding:0;">
+                    <img src="start-button.png" alt="START" class="pixel-button-image">
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    document.getElementById('startForm').onsubmit = function(e) {
+        e.preventDefault();
+
+        // 1. ดึงค่าจากช่องกรอก
+        const username = document.getElementById('username').value;
+        const gender = document.getElementById('gender').value;
+        const status = document.getElementById('status').value;
+
+        // 2. บันทึกลง localStorage (ลบอันเก่าแล้วแทนด้วยอันนี้)
+        localStorage.setItem('user_name', username);
+        localStorage.setItem('user_gender', gender);
+        localStorage.setItem('user_status', status);
+
+        // 3. ไปหน้าแรกของแบบทดสอบ
+        window.location.href = "question1.html";
+    };
+</script>
+
+</body>
+</html>
